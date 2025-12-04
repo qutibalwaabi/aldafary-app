@@ -30,29 +30,41 @@ try {
         Write-Host "   ✅ الفرع مربوط بـ: $upstream" -ForegroundColor Green
         
         # التحقق من الفرق
-        $ahead = & git rev-list --count @{u}..HEAD 2>&1
-        $behind = & git rev-list --count HEAD..@{u} 2>&1
+        $aheadOutput = & git rev-list --count @{u}..HEAD 2>&1
+        $aheadExitCode = $LASTEXITCODE
+        $behindOutput = & git rev-list --count HEAD..@{u} 2>&1
+        $behindExitCode = $LASTEXITCODE
         
-        if ($ahead -gt 0) {
-            Write-Host "   ⚠️  يوجد $ahead commits غير مرفوعة" -ForegroundColor Yellow
-        } elseif ($behind -gt 0) {
-            Write-Host "   ⚠️  Remote أمام بـ $behind commits" -ForegroundColor Yellow
+        if ($aheadExitCode -eq 0 -and $behindExitCode -eq 0) {
+            $ahead = [int]$aheadOutput
+            $behind = [int]$behindOutput
+            
+            if ($ahead -gt 0) {
+                Write-Host "   ⚠️  يوجد $ahead commits غير مرفوعة" -ForegroundColor Yellow
+            } elseif ($behind -gt 0) {
+                Write-Host "   ⚠️  Remote أمام بـ $behind commits" -ForegroundColor Yellow
+            } else {
+                Write-Host "   ✅ الكود محدث ومرفوع بالكامل!" -ForegroundColor Green
+            }
         } else {
-            Write-Host "   ✅ الكود محدث ومرفوع بالكامل!" -ForegroundColor Green
+            Write-Host "   ⚠️  لا يمكن تحديد الفرق بين local و remote" -ForegroundColor Yellow
         }
     } else {
         Write-Host "   ⚠️  الفرع غير مربوط بـ remote" -ForegroundColor Yellow
         
         # محاولة fetch للتحقق
         Write-Host "   جاري محاولة الاتصال..." -ForegroundColor Gray
-        $fetch = & git fetch origin 2>&1
+        $fetchOutput = & git fetch origin 2>&1
+        $fetchExitCode = $LASTEXITCODE
         
-        if ($LASTEXITCODE -eq 0) {
+        if ($fetchExitCode -eq 0) {
             Write-Host "   ✅ تم الاتصال بنجاح!" -ForegroundColor Green
             
             # التحقق من وجود remote branch
-            $remoteBranch = & git ls-remote --heads origin main 2>&1
-            if ($remoteBranch) {
+            $remoteBranchOutput = & git ls-remote --heads origin main 2>&1
+            $remoteBranchExitCode = $LASTEXITCODE
+            
+            if ($remoteBranchExitCode -eq 0 -and $remoteBranchOutput) {
                 Write-Host "   ✅ Repository موجود على GitHub!" -ForegroundColor Green
                 Write-Host "   ℹ️  تحتاج فقط إلى ربط الفرع:" -ForegroundColor Yellow
                 Write-Host "      git branch --set-upstream-to=origin/main main" -ForegroundColor Gray
@@ -60,7 +72,9 @@ try {
                 Write-Host "   ⚠️  لا يوجد remote branch بعد" -ForegroundColor Yellow
             }
         } else {
-            Write-Host "   ❌ فشل الاتصال: $fetch" -ForegroundColor Red
+            $fetchError = $fetchOutput -join "`n"
+            Write-Host "   ❌ فشل الاتصال:" -ForegroundColor Red
+            Write-Host "      $fetchError" -ForegroundColor Red
         }
     }
 } catch {

@@ -13,13 +13,17 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'
+          flutter-version: '3.27.0'
           channel: 'stable'
+          cache: true
+      
+      - name: Flutter doctor
+        run: flutter doctor -v
       
       - name: Get dependencies
         run: flutter pub get
@@ -27,17 +31,20 @@ jobs:
       - name: Install CocoaPods dependencies
         run: |
           cd ios
-          pod install
-        continue-on-error: true
+          sudo gem install cocoapods
+          pod install --repo-update
       
       - name: Build IPA
-        run: flutter build ipa --release
+        run: flutter build ipa --release --no-codesign
+        env:
+          FLUTTER_BUILD_MODE: release
       
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-app
           path: build/ios/ipa/*.ipa
           retention-days: 30
+          if-no-files-found: error
 
 
