@@ -1,0 +1,2 @@
+D:/smsfllatter/untitled/android/app/.cxx/Debug/6b4n1v4e/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/smsfllatter/untitled/android/app/.cxx/Debug/6b4n1v4e/armeabi-v7a/CMakeFiles/rebuild_cache.dir

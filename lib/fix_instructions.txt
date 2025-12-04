@@ -1,0 +1,24 @@
+تعليمات إصلاح أخطاء الترجمة:
+
+1. قم بحذف الملفات التالية يدوياً:
+   - home_screen.dart
+   - receipt_voucher_screen.dart
+   - payment_voucher_screen.dart
+   - operations_screen.dart
+   - financial_engine_service.dart
+   - account_statement_screen.dart
+   - login_screen.dart
+
+2. قم بإعادة تسمية الملفات التالية:
+   - home.dart إلى home_screen.dart
+   - receipt.dart إلى receipt_voucher_screen.dart
+   - payment.dart إلى payment_voucher_screen.dart
+   - operations.dart إلى operations_screen.dart
+   - engine.dart إلى financial_engine_service.dart
+   - statement.dart إلى account_statement_screen.dart
+   - login.dart إلى login_screen.dart
+   - main_new.dart إلى main.dart
+
+3. قم بتشغيل التطبيق مرة أخرى
+
+بهذه الطريقة، سيتم حل جميع مشاكل الترجمة.

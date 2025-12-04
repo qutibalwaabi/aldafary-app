@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "867235041226",
+    "project_id": "sadekappsystem",
+    "storage_bucket": "sadekappsystem.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867235041226:android:43055f29652308476b4933",
+        "android_client_info": {
+          "package_name": "com.example.untitled"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoxyGg6e4bh2ZUokYjB5ME6kbVMhVY-q0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

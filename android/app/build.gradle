@@ -1,0 +1,94 @@
+plugins {
+    id "com.android.application"
+    id 'com.google.gms.google-services'
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+android {
+    namespace = "com.example.untitled"
+    compileSdk = 35
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    defaultConfig {
+        applicationId = "com.example.untitled"
+        minSdk = 23
+        targetSdk = 35
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.debug
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Additional optimizations
+            zipAlignEnabled = true
+            debuggable = false
+        }
+        debug {
+            minifyEnabled = false
+            shrinkResources = false
+        }
+    }
+    
+    // Split APKs by ABI to reduce size (only for release builds)
+    splits {
+        abi {
+            enable = false // Disable for debug builds to allow flutter run
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a'
+            universalApk = true // Create universal APK for debug
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies { 
+    // No specific dependencies needed here for now
+}
+
+// Rename output APK with ABI name and version
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def abiName = output.getFilter(com.android.build.OutputFile.ABI)
+        if (abiName == null) {
+            abiName = "universal"
+        }
+        def versionName = variant.versionName
+        def versionCode = variant.versionCode
+        output.outputFileName = "app-${variant.name}-${abiName}-v${versionName}-${versionCode}.apk"
+    }
+}

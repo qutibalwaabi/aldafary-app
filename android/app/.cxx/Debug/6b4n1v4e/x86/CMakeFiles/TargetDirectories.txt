@@ -1,0 +1,2 @@
+D:/smsfllatter/untitled/android/app/.cxx/Debug/6b4n1v4e/x86/CMakeFiles/edit_cache.dir
+D:/smsfllatter/untitled/android/app/.cxx/Debug/6b4n1v4e/x86/CMakeFiles/rebuild_cache.dir
